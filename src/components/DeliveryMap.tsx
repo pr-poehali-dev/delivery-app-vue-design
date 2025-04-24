@@ -1,80 +1,99 @@
-import { useEffect, useRef } from "react";
-import { ArrowLeftIcon, ArrowRightIcon, ZoomInIcon, ZoomOutIcon } from "lucide-react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { CompassIcon, ZoomInIcon, ZoomOutIcon, LayersIcon, NavigationIcon } from "lucide-react";
 
 interface DeliveryMapProps {
-  currentLocation: {
-    lat: number;
-    lng: number;
-  };
+  currentLocation: { lat: number; lng: number };
 }
 
-const DeliveryMap = ({ currentLocation }: DeliveryMapProps) => {
+const DeliveryMap: FC<DeliveryMapProps> = ({ currentLocation }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [zoomLevel, setZoomLevel] = useState(15);
+  const [isCentered, setIsCentered] = useState(true);
   
+  // Имитация инициализации карты
   useEffect(() => {
-    // В реальном проекте здесь был бы код для инициализации карты
-    // с помощью Google Maps, Yandex Maps или Leaflet
-    console.log("Карта инициализирована с координатами:", currentLocation);
-    
-    // Здесь только для имитации карты
-    const mapElement = mapRef.current;
-    if (mapElement) {
-      // Рисуем имитацию карты
-      const ctx = document.createElement("canvas").getContext("2d");
-      if (ctx) {
-        // тут бы была настоящая инициализация карты
-      }
+    // В реальном приложении здесь будет подключение API карт (Яндекс.Карты, Google Maps, Mapbox и т.д.)
+    if (mapRef.current) {
+      // Здесь бы инициализировали карту
+      console.log("Карта инициализирована с координатами:", currentLocation);
     }
+
+    // Имитация обновления маркера курьера при изменении его местоположения
+    return () => {
+      // Очистка карты при размонтировании компонента
+      console.log("Карта уничтожена");
+    };
   }, [currentLocation]);
 
+  // Обработчики для интерфейса карты
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + 1, 20));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(prev - 1, 10));
+  };
+
+  const handleCenterMap = () => {
+    setIsCentered(true);
+    // В реальности здесь бы центрировали карту на текущем местоположении
+    console.log("Карта центрирована на:", currentLocation);
+  };
+
+  // Стили для имитации карты
+  const mapStyle = {
+    background: `url("https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${currentLocation.lng},${currentLocation.lat},${zoomLevel},0/800x600?access_token=pk.eyJ1IjoiZGVtby1hY2NvdW50IiwiYSI6ImNrZHNmb3JvNjA0Ym8ycW1uazVtcTVtbW8ifQ.ScRgYMC-SBL_YVGz6nS2QA")`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
+
   return (
-    <div className="relative h-full">
-      {/* Контейнер для карты */}
+    <div className="relative w-full h-full">
+      {/* Карта */}
       <div 
-        ref={mapRef} 
-        className="w-full h-full bg-[url('/placeholder.svg')] bg-cover bg-center"
-        style={{
-          backgroundImage: "url('https://i.imgur.com/2JgFQwL.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center"
-        }}
+        ref={mapRef}
+        className="w-full h-full bg-gray-200"
+        style={mapStyle}
       >
-        {/* Имитация пути доставки */}
-        <div className="absolute top-1/2 left-1/4 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white border-4 border-white shadow-lg">
-          A
+        {/* Визуальная имитация маршрута (в реальности это был бы компонент карты) */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+          <div className="h-24 w-1 bg-primary opacity-50"></div>
+          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white">
+            <NavigationIcon className="h-5 w-5" />
+          </div>
         </div>
-        
-        <div className="absolute bottom-1/3 right-1/3 w-8 h-8 bg-destructive rounded-full flex items-center justify-center text-white border-4 border-white shadow-lg">
-          B
-        </div>
-        
-        {/* Имитация маркера текущего положения */}
-        <div className="absolute top-1/2 right-1/2 w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-lg pulse"></div>
       </div>
 
       {/* Элементы управления картой */}
       <div className="absolute top-4 right-4 flex flex-col gap-2">
-        <Button variant="secondary" size="icon" className="bg-white shadow-md">
-          <ZoomInIcon className="w-4 h-4" />
+        <Button size="icon" variant="secondary" onClick={handleZoomIn}>
+          <ZoomInIcon className="h-5 w-5" />
         </Button>
-        <Button variant="secondary" size="icon" className="bg-white shadow-md">
-          <ZoomOutIcon className="w-4 h-4" />
+        <Button size="icon" variant="secondary" onClick={handleZoomOut}>
+          <ZoomOutIcon className="h-5 w-5" />
+        </Button>
+        <Button 
+          size="icon" 
+          variant="secondary" 
+          onClick={handleCenterMap}
+          className={isCentered ? "bg-primary text-white" : ""}
+        >
+          <CompassIcon className="h-5 w-5" />
+        </Button>
+        <Button size="icon" variant="secondary">
+          <LayersIcon className="h-5 w-5" />
         </Button>
       </div>
 
-      {/* Информация о маршруте */}
-      <div className="absolute top-4 left-4 right-24 bg-white p-3 rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm font-medium">Маршрут доставки</h2>
-          <div className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-            2.5 км
+      {/* Информация о маршруте сверху */}
+      <div className="absolute top-4 left-4 right-16 bg-white rounded-lg shadow-md p-3">
+        <div className="flex items-center gap-2">
+          <NavigationIcon className="h-5 w-5 text-primary" />
+          <div>
+            <div className="font-medium">2.5 км до места назначения</div>
+            <div className="text-sm text-muted-foreground">Прибытие через ~15 мин</div>
           </div>
-        </div>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <ArrowLeftIcon className="w-3 h-3" />
-          <span>Через 200м поверните направо на ул. Тверская</span>
-          <ArrowRightIcon className="w-3 h-3" />
         </div>
       </div>
     </div>

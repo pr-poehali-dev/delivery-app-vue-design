@@ -107,38 +107,33 @@ const DeliveryApp = () => {
           <TabsContent value="profile" className="m-0 p-0">
             <ProfileComponent />
           </TabsContent>
+          
+          {/* Нижняя панель навигации */}
+          <TabsList className="fixed bottom-0 z-10 w-full justify-around rounded-none bg-white p-0 h-16 border-t border-gray-200">
+            <TabsTrigger 
+              value="map" 
+              className="flex flex-col items-center justify-center h-full data-[state=active]:bg-transparent data-[state=active]:text-primary"
+            >
+              <MapPinIcon className="w-5 h-5" />
+              <span className="text-xs mt-1">Карта</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="orders" 
+              className="flex flex-col items-center justify-center h-full data-[state=active]:bg-transparent data-[state=active]:text-primary"
+            >
+              <PackageIcon className="w-5 h-5" />
+              <span className="text-xs mt-1">Заказы</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="profile" 
+              className="flex flex-col items-center justify-center h-full data-[state=active]:bg-transparent data-[state=active]:text-primary"
+            >
+              <UserIcon className="w-5 h-5" />
+              <span className="text-xs mt-1">Профиль</span>
+            </TabsTrigger>
+          </TabsList>
         </Tabs>
       </main>
-
-      {/* Нижняя панель навигации */}
-      <footer className="sticky bottom-0 z-10 bg-white border-t border-gray-200">
-        <TabsList className="w-full justify-around rounded-none bg-white p-0 h-16">
-          <TabsTrigger 
-            value="map" 
-            className="flex flex-col items-center justify-center h-full data-[state=active]:bg-transparent data-[state=active]:text-primary"
-            onClick={() => setCurrentTab("map")}
-          >
-            <MapPinIcon className="w-5 h-5" />
-            <span className="text-xs mt-1">Карта</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="orders" 
-            className="flex flex-col items-center justify-center h-full data-[state=active]:bg-transparent data-[state=active]:text-primary"
-            onClick={() => setCurrentTab("orders")}
-          >
-            <PackageIcon className="w-5 h-5" />
-            <span className="text-xs mt-1">Заказы</span>
-          </TabsTrigger>
-          <TabsTrigger 
-            value="profile" 
-            className="flex flex-col items-center justify-center h-full data-[state=active]:bg-transparent data-[state=active]:text-primary"
-            onClick={() => setCurrentTab("profile")}
-          >
-            <UserIcon className="w-5 h-5" />
-            <span className="text-xs mt-1">Профиль</span>
-          </TabsTrigger>
-        </TabsList>
-      </footer>
     </div>
   );
 };
