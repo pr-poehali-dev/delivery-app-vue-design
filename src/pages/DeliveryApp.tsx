@@ -19,7 +19,7 @@ const DEFAULT_LOCATION = {
 
 const DeliveryApp = () => {
   const [activeTab, setActiveTab] = useState("map");
-  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<Location>(DEFAULT_LOCATION);
   const [locationError, setLocationError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const DeliveryApp = () => {
   return (
     <div className="relative min-h-screen pb-16">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsContent value="map" className="m-0">
+        <TabsContent value="map" className="m-0 h-[calc(100vh-64px)]">
           {locationError && (
             <Card className="p-3 m-3 bg-orange-50 border-orange-200">
               <p className="text-sm text-orange-700">{locationError}</p>
@@ -80,9 +80,7 @@ const DeliveryApp = () => {
             </Card>
           )}
           
-          <DeliveryMap 
-            location={currentLocation || DEFAULT_LOCATION} 
-          />
+          <DeliveryMap location={currentLocation} />
         </TabsContent>
 
         <TabsContent value="orders" className="m-0">

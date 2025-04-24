@@ -3,13 +3,19 @@ import { Button } from "@/components/ui/button";
 import { CompassIcon, ZoomInIcon, ZoomOutIcon, LayersIcon, NavigationIcon } from "lucide-react";
 
 interface DeliveryMapProps {
-  currentLocation: { lat: number; lng: number };
+  location: { latitude: number; longitude: number };
 }
 
-const DeliveryMap: FC<DeliveryMapProps> = ({ currentLocation }) => {
+const DeliveryMap: FC<DeliveryMapProps> = ({ location }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [zoomLevel, setZoomLevel] = useState(15);
   const [isCentered, setIsCentered] = useState(true);
+  
+  // Преобразуем формат координат для совместимости
+  const currentLocation = {
+    lat: location.latitude,
+    lng: location.longitude
+  };
   
   // Имитация инициализации карты
   useEffect(() => {
