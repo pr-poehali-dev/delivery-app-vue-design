@@ -41,9 +41,10 @@ const DeliveryMap: FC<DeliveryMapProps> = ({ currentLocation }) => {
     console.log("Карта центрирована на:", currentLocation);
   };
 
-  // Стили для имитации карты
+  // Используем статическую карту для демо
+  // В реальном приложении здесь бы использовался интерактивный компонент карты
   const mapStyle = {
-    background: `url("https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${currentLocation.lng},${currentLocation.lat},${zoomLevel},0/800x600?access_token=pk.eyJ1IjoiZGVtby1hY2NvdW50IiwiYSI6ImNrZHNmb3JvNjA0Ym8ycW1uazVtcTVtbW8ifQ.ScRgYMC-SBL_YVGz6nS2QA")`,
+    backgroundImage: `url("https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${currentLocation.lng},${currentLocation.lat},${zoomLevel},0/800x600?access_token=pk.eyJ1IjoiZGVtby1hY2NvdW50IiwiYSI6ImNsajY3NXJweTBiYmgzcXBpNTk2dWE2dTEifQ.XlJJAYWZ0HEn3mMwXwA4GA")`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   };

@@ -6,28 +6,40 @@ import DeliveryMap from "@/components/DeliveryMap";
 import OrdersList from "@/components/OrdersList";
 import ProfileComponent from "@/components/ProfileComponent";
 import { MapPinIcon, PackageIcon, MenuIcon, BellIcon, UserIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const DeliveryApp = () => {
   const [currentTab, setCurrentTab] = useState("map");
-  const navigate = useNavigate();
   
   // Имитируем получение текущей локации курьера
   const [currentLocation, setCurrentLocation] = useState({ lat: 55.751244, lng: 37.618423 });
+  const [locationError, setLocationError] = useState<string | null>(null);
   
   useEffect(() => {
     // В реальном приложении тут бы запрашивали геолокацию пользователя
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCurrentLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        });
-      },
-      (error) => {
-        console.error("Ошибка получения местоположения:", error);
-      }
-    );
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+          setLocationError(null);
+        },
+        (error) => {
+          console.error("Ошибка получения местоположения:", error);
+          // Используем запасные координаты и сообщаем об ошибке
+          setLocationError(`Не удалось получить местоположение: ${error.message || "Доступ к геолокации запрещен"}`);
+          // Оставляем дефолтные координаты (Москва)
+        },
+        { 
+          enableHighAccuracy: true, 
+          timeout: 10000, 
+          maximumAge: 0 
+        }
+      );
+    } else {
+      setLocationError("Геолокация не поддерживается вашим браузером");
+    }
   }, []);
 
   return (
@@ -59,6 +71,12 @@ const DeliveryApp = () => {
       <main className="flex-1 overflow-hidden">
         <Tabs value={currentTab} onValueChange={setCurrentTab} className="h-full">
           <TabsContent value="map" className="h-full m-0 p-0">
+            {locationError && (
+              <div className="absolute top-20 left-4 right-4 bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-md z-10 shadow-md">
+                <p className="text-sm">{locationError}</p>
+                <p className="text-xs mt-1">Используются координаты по умолчанию</p>
+              </div>
+            )}
             <DeliveryMap currentLocation={currentLocation} />
             
             {/* Плавающая карточка с текущей доставкой */}
